@@ -24,7 +24,7 @@ export class PasteJSONPlugin extends Plugin {
         newState: EditorState
       ) {
         (this as PasteJSONPlugin).schema = newState.schema;
-        return newState.tr;
+        return undefined;
       },
     });
   }
