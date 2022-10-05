@@ -20,12 +20,12 @@ npm install
 # At the working directory `modusoperandi-licit-pasteJSON`
 npm run build:dist 
 ```
-### To build the pastJSON pack
+### To build the pasteJSON pack
 ```
 # At the working directory `modusoperandi-licit-pasteJSON`
 npm pack
 ```  
-### To publish pastJSON
+### To publish pasteJSON
 ```
 # At the working directory `modusoperandi-licit-pasteJSON`
 npm run publish:dist
