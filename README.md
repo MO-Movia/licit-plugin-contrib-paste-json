@@ -1,4 +1,7 @@
 
+
+
+
 # PasteJSON Plugin!
 ProseMirror based plugin that allows you to paste in prosemirror JSON into the editor.
 
@@ -38,10 +41,11 @@ Use Git bash or Windows Power Shell to install build and run the project
     dragDivElement.ondragstart = processDrag;
     dragDivElement.ondragover = cancelDefault;
 ...
-	function cancelDefault(e) {
-		e.preventDefault();
-	}
 
+    function cancelDefault(e) {
+        e.preventDefault();
+    }
+    
     function processDrag(e) {
       e.dataTransfer.setData(
     'text/plain',
