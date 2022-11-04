@@ -9,10 +9,14 @@ export class PasteJSONPlugin extends Plugin {
       props: {
         transformPasted(slice: Slice) {
           if (0 < slice.content.childCount) {
-            const json = JSON.parse(slice.content.firstChild.textContent);
+            try {
+              const json = JSON.parse(slice.content.firstChild.textContent);
 
-            if (json) {
-              slice = Slice.fromJSON((this as PasteJSONPlugin).schema, json);
+              if (json) {
+                slice = Slice.fromJSON((this as PasteJSONPlugin).schema, json);
+              }
+            } catch (_e) {
+              /* empty */
             }
           }
           return slice;

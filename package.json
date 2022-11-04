@@ -1,6 +1,6 @@
 {
   "name": "@modusoperandi/licit-paste-json",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "MO's ProseMirror Plugin that allows you to paste in prosemirror JSON into the editor.",
   "main": "dist/index.js",
   "typings": "./index.d.ts",
@@ -76,6 +76,7 @@
     "build:babel": "babel src --out-dir dist --extensions .ts",
     "build:dist": "npm run clean && npm run build:ts && npm run webpack && npm run build:babel",
     "lint:ts": "eslint src --ext .ts --fix",
+    "lint:css": "echo no CSS available && exit 1",
     "prepare": "npm run build:dist",
     "publish:dist": "npm publish"
   },
