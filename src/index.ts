@@ -1,5 +1,6 @@
 import {Schema, Slice} from 'prosemirror-model';
 import {EditorState, Plugin, PluginKey, Transaction} from 'prosemirror-state';
+import {EditorView} from 'prosemirror-view';
 
 export class PasteJSONPlugin extends Plugin {
   schema: Schema = null;
@@ -36,5 +37,11 @@ export class PasteJSONPlugin extends Plugin {
   // Plugin method that supplies plugin schema to editor
   getEffectiveSchema(schema: Schema): Schema {
     return schema;
+  }
+
+  insert(json: {[key: string]: unknown}, view: EditorView): void {
+    const slice = Slice.fromJSON(this.schema, json);
+    const tr = view.state.tr.replaceSelection(slice);
+    view.dispatch(tr.scrollIntoView());
   }
 }
