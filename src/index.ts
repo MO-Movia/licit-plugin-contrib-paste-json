@@ -28,7 +28,7 @@ export class PasteJSONPlugin extends Plugin {
           return text;
         },
         transformPasted(slice: Slice) {
-          if (0 < slice.content.childCount) {
+          if (0 < slice.content.childCount && (this as PasteJSONPlugin).slice) {
             slice = (this as PasteJSONPlugin).slice;
           }
           // reset
