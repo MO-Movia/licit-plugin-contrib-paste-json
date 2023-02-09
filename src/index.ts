@@ -14,13 +14,9 @@ export class PasteJSONPlugin extends Plugin {
             const json = JSON.parse(text);
 
             if (json) {
-              (this as PasteJSONPlugin).slice = new Slice(
-                Fragment.from(
-                  (this as PasteJSONPlugin).schema.nodeFromJSON(json)
-                ),
-                0,
-                0
-              );
+              (this as PasteJSONPlugin).slice = (
+                this as PasteJSONPlugin
+              ).getSlice(json);
             }
           } catch (_e) {
             /* empty */
@@ -47,14 +43,17 @@ export class PasteJSONPlugin extends Plugin {
     });
   }
 
+  getSlice(json: {[key: string]: unknown}): Slice {
+    return new Slice(Fragment.from(this.schema.nodeFromJSON(json)), 0, 0);
+  }
+
   // Plugin method that supplies plugin schema to editor
   getEffectiveSchema(schema: Schema): Schema {
     return schema;
   }
 
   insert(json: {[key: string]: unknown}, view: EditorView): void {
-    const slice = Slice.fromJSON(this.schema, json);
-    const tr = view.state.tr.replaceSelection(slice);
+    const tr = view.state.tr.replaceSelection(this.getSlice(json));
     view.dispatch(tr.scrollIntoView());
   }
 }
