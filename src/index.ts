@@ -1,5 +1,5 @@
 import {Fragment, Schema, Slice} from 'prosemirror-model';
-import {EditorState, Plugin, PluginKey, Transaction} from 'prosemirror-state';
+import {EditorState, Plugin, PluginKey, TextSelection, Transaction} from 'prosemirror-state';
 import {EditorView} from 'prosemirror-view';
 
 export class PasteJSONPlugin extends Plugin {
@@ -53,7 +53,29 @@ export class PasteJSONPlugin extends Plugin {
   }
 
   insert(json: {[key: string]: unknown}, view: EditorView): void {
-    const tr = view.state.tr.replaceSelection(this.getSlice(json));
+    const {from} = view.state.selection;
+    let tr = view.state.tr.insert(from, this.schema.nodeFromJSON(json));
+    const selection = TextSelection.create(tr.doc, from + 5, from + 5);
+
+    tr = tr.setSelection(selection);
+    tr = this.insertParagraph(view.state, tr);
     view.dispatch(tr.scrollIntoView());
+  }
+
+  // Add empty line after reference
+  // To make easier to enter a line after reference
+  insertParagraph(state: EditorState, tr: Transaction) {
+    const paragraph = state.schema.nodes['paragraph'];
+    const textNode = state.schema.text(' ');
+    const {from, to} = tr.selection;
+    if (from !== to) {
+      return tr;
+    }
+    const paragraphNode = paragraph.create({}, textNode, null);
+    tr = tr.insert(
+      from + tr.selection.$head.node(1).nodeSize - 4,
+      Fragment.from(paragraphNode)
+    );
+    return tr;
   }
 }
