@@ -54,7 +54,11 @@ export class PasteJSONPlugin extends Plugin {
 
   insert(json: {[key: string]: unknown}, view: EditorView): void {
     const {from} = view.state.selection;
-    let tr = view.state.tr.insert(from, this.schema.nodeFromJSON(json));
+    const jsonEx = {...json};
+    if('fragment' === json.type) {
+      jsonEx.type = 'reference';
+    }
+    let tr = view.state.tr.insert(from, this.schema.nodeFromJSON(jsonEx));
     const selection = TextSelection.create(tr.doc, from + 5, from + 5);
 
     tr = tr.setSelection(selection);
