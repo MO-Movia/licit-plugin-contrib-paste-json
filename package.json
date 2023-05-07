@@ -9,11 +9,6 @@
     "type": "git",
     "url": "git+https://github.com/MO-Movia/licit-plugin-contrib-paste-json.git"
   },
-  "maintainers": [
-    {
-      "name": "Firmusoft Solutions"
-    }
-  ],
   "ngPackage": {
     "dest": "/dist/libs/"
   },
@@ -42,6 +37,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
+    "@cyclonedx/cyclonedx-npm": "^1.11.0",
     "@types/jest": "^29.2.4",
     "@typescript-eslint/eslint-plugin": "^5.46.1",
     "@typescript-eslint/parser": "^5.46.1",
@@ -83,7 +79,7 @@
     "test:coverage": "jest --coverage",
     "prepare": "npm run build:dist",
     "publish:dist": "npm publish",
-    "ci:bom": "cyclonedx-bom -o dist/bom.xml"
+    "ci:bom": "cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml"
   },
   "importSort": {
     ".js": {
