@@ -15,7 +15,7 @@
   "dependencies": {
     "prosemirror-model": "~1.16.0",
     "prosemirror-state": "^1.4.2",
-	  "prosemirror-transform": "^1.7.0"
+    "prosemirror-transform": "^1.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.19.3",
@@ -70,6 +70,9 @@
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "write-file-webpack-plugin": "^4.5.1"
+  },
+  "overrides": {
+    "semver": "^7.5.2"
   },
   "scripts": {
     "test": "jest --coverage",

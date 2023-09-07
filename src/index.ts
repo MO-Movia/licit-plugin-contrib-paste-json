@@ -1,7 +1,12 @@
-import { Fragment, Schema, Slice } from 'prosemirror-model';
-import { EditorState, Plugin, PluginKey, TextSelection, Transaction } from 'prosemirror-state';
-import { EditorView } from 'prosemirror-view';
-import { Transform } from 'prosemirror-transform';
+import {Fragment, Schema, Slice} from 'prosemirror-model';
+import {
+  EditorState,
+  Plugin,
+  PluginKey,
+  TextSelection,
+  Transaction,
+} from 'prosemirror-state';
+import {EditorView} from 'prosemirror-view';
 export class PasteJSONPlugin extends Plugin {
   schema: Schema = null;
   slice: Slice = null;
@@ -43,7 +48,7 @@ export class PasteJSONPlugin extends Plugin {
     });
   }
 
-  getSlice(json: { [key: string]: unknown }): Slice {
+  getSlice(json: {[key: string]: unknown}): Slice {
     return new Slice(Fragment.from(this.schema.nodeFromJSON(json)), 0, 0);
   }
 
@@ -52,18 +57,18 @@ export class PasteJSONPlugin extends Plugin {
     return schema;
   }
 
-  insert(json: { [key: string]: unknown }, view: EditorView): void {
-    const { from } = view.state.selection;
-    const jsonEx = { ...json };
+  insert(json: {[key: string]: unknown}, view: EditorView): void {
+    const {from} = view.state.selection;
+    const jsonEx = {...json};
     if ('fragment' === json.type) {
       jsonEx.type = 'reference';
     }
-    let tr = ((view.state.tr) as Transform).insert(from, this.schema.nodeFromJSON(jsonEx));
+    let tr = view.state.tr.insert(from, this.schema.nodeFromJSON(jsonEx));
     const selection = TextSelection.create(tr.doc, from + 5, from + 5);
 
-    tr = (tr as Transaction).setSelection(selection);
-    tr = this.insertParagraph(view.state, tr as Transaction);
-    view.dispatch((tr as Transaction).scrollIntoView());
+    tr = tr.setSelection(selection);
+    tr = this.insertParagraph(view.state, tr);
+    view.dispatch(tr.scrollIntoView());
   }
 
   // Add empty line after reference
@@ -71,7 +76,7 @@ export class PasteJSONPlugin extends Plugin {
   insertParagraph(state: EditorState, tr: Transaction) {
     const paragraph = state.schema.nodes['paragraph'];
     const textNode = state.schema.text(' ');
-    const { from, to } = tr.selection;
+    const {from, to} = tr.selection;
     if (from !== to) {
       return tr;
     }
