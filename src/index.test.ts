@@ -1,9 +1,9 @@
-import {createEditor, doc, p} from 'jest-prosemirror';
-import {PasteJSONPlugin} from './index';
-import {EditorView} from 'prosemirror-view';
-import {schema, builders} from 'prosemirror-test-builder';
-import {Schema, Slice} from 'prosemirror-model';
-import {Plugin, PluginKey, EditorState, TextSelection} from 'prosemirror-state';
+import { createEditor, doc, p } from 'jest-prosemirror';
+import { PasteJSONPlugin } from './index';
+import { EditorView } from 'prosemirror-view';
+import { schema, builders } from 'prosemirror-test-builder';
+import { Schema, Slice } from 'prosemirror-model';
+import { Plugin, PluginKey, EditorState, TextSelection } from 'prosemirror-state';
 
 class TestPlugin extends Plugin {
   constructor() {
@@ -34,13 +34,13 @@ describe('PasteJSONFPlugin', () => {
   it('insert method should insert JSON and add an empty line after reference', () => {
     const json = {
       type: 'paragraph',
-      content: [{type: 'text', text: 'Hello world'}],
+      content: [{ type: 'text', text: 'Hello world' }],
     };
     const mySchema = new Schema({
       nodes: schema.spec.nodes,
       marks: schema.spec.marks,
     });
-    const {doc, p} = builders(mySchema, {p: {nodeType: 'paragraph'}});
+    const { doc, p } = builders(mySchema, { p: { nodeType: 'paragraph' } });
     const state = EditorState.create({
       doc: doc(p('Hello World!!!!!!!!!!!!')),
       schema: mySchema,
@@ -50,7 +50,7 @@ describe('PasteJSONFPlugin', () => {
     const dom = document.createElement('div');
 
     const view = new EditorView(
-      {mount: dom},
+      { mount: dom },
       {
         state: state,
       }
@@ -59,7 +59,7 @@ describe('PasteJSONFPlugin', () => {
     const tr = view.state.tr.setSelection(selection);
     (view.dispatch = jest.fn()),
       view.updateState(
-        view.state.reconfigure({plugins: [plugin, new TestPlugin()]})
+        view.state.reconfigure({ plugins: [plugin, new TestPlugin()] })
       );
 
     view.dispatch(tr);
@@ -114,7 +114,7 @@ describe('PasteJSONFPlugin', () => {
   it('transformPastedText method should parse JSON and set the slice', () => {
     const text = JSON.stringify({
       type: 'paragraph',
-      content: [{type: 'text', text: 'Hello'}],
+      content: [{ type: 'text', text: 'Hello' }],
     });
     const transformedText = plugin.props.transformPastedText.call(plugin, text);
 
@@ -124,7 +124,7 @@ describe('PasteJSONFPlugin', () => {
   it('insert method should conatin fragment type', () => {
     const json = {
       type: 'fragment',
-      content: [{type: 'text', text: 'Hello world!!!!!!'}],
+      content: [{ type: 'text', text: 'Hello world!!!!!!' }],
     };
 
     const mySchema = new Schema({
@@ -143,16 +143,16 @@ describe('PasteJSONFPlugin', () => {
           content: 'inline*',
           group: 'block',
           attrs: {
-            id: {default: ''},
+            id: { default: '' },
           },
           toDOM(node) {
-            return ['div', {'data-custom-id': node.attrs.id}, 0];
+            return ['div', { 'data-custom-id': node.attrs.id }, 0];
           },
           parseDOM: [
             {
               tag: 'div[data-custom-id]',
               getAttrs(dom) {
-                return {id: dom.getAttribute('data-custom-id')};
+                return { id: dom.getAttribute('data-custom-id') };
               },
             },
           ],
@@ -165,7 +165,7 @@ describe('PasteJSONFPlugin', () => {
 
     const customDoc = mySchema.nodes.doc.create(
       null, // No attributes
-      mySchema.nodes.reference.create({id: 'my-custom-node'})
+      mySchema.nodes.reference.create({ id: 'my-custom-node' })
     );
 
     // Create an editor state with the custom document
@@ -178,7 +178,7 @@ describe('PasteJSONFPlugin', () => {
     const dom = document.createElement('div');
 
     const view = new EditorView(
-      {mount: dom},
+      { mount: dom },
       {
         state: state,
       }
@@ -195,7 +195,7 @@ describe('PasteJSONFPlugin', () => {
       nodes: schema.spec.nodes,
       marks: schema.spec.marks,
     });
-    const {doc, p} = builders(mySchema, {p: {nodeType: 'paragraph'}});
+    const { doc, p } = builders(mySchema, { p: { nodeType: 'paragraph' } });
     const state = EditorState.create({
       doc: doc(p('Hello World!!')),
       schema: mySchema,
@@ -203,7 +203,7 @@ describe('PasteJSONFPlugin', () => {
     });
     const dom = document.createElement('div');
     const view = new EditorView(
-      {mount: dom},
+      { mount: dom },
       {
         state: state,
       }

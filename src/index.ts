@@ -1,7 +1,12 @@
 import {Fragment, Schema, Slice} from 'prosemirror-model';
-import {EditorState, Plugin, PluginKey, TextSelection, Transaction} from 'prosemirror-state';
+import {
+  EditorState,
+  Plugin,
+  PluginKey,
+  TextSelection,
+  Transaction,
+} from 'prosemirror-state';
 import {EditorView} from 'prosemirror-view';
-
 export class PasteJSONPlugin extends Plugin {
   schema: Schema = null;
   slice: Slice = null;
@@ -55,7 +60,7 @@ export class PasteJSONPlugin extends Plugin {
   insert(json: {[key: string]: unknown}, view: EditorView): void {
     const {from} = view.state.selection;
     const jsonEx = {...json};
-    if('fragment' === json.type) {
+    if ('fragment' === json.type) {
       jsonEx.type = 'reference';
     }
     let tr = view.state.tr.insert(from, this.schema.nodeFromJSON(jsonEx));
