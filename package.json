@@ -73,8 +73,7 @@
     "write-file-webpack-plugin": "^4.5.1"
   },
   "overrides": {
-    "semver": "^7.5.2",
-    "prosemirror-model": "~1.16.1"
+    "semver": "^7.5.2"
   },
   "scripts": {
     "test": "jest --coverage",
@@ -88,7 +87,6 @@
     "ci:build": "npm run clean && npm run build:ts && npm run webpack && npm run build:babel",
     "test:unit": "jest",
     "test:coverage": "jest --coverage",
-    "prepare": "npm run build:dist",
     "publish:dist": "npm publish",
     "ci:bom": "cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml"
   },
