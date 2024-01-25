@@ -13,7 +13,7 @@ class TestPlugin extends Plugin {
   }
 }
 describe('PasteJSONFPlugin', () => {
-  let plugin;
+  let plugin!: PasteJSONPlugin;
 
   beforeEach(() => {
     plugin = new PasteJSONPlugin();
@@ -26,9 +26,14 @@ describe('PasteJSONFPlugin', () => {
     });
   });
 
-  it('transformPastedText method with null value', () => {
-    const transformedText = plugin.props.transformPastedText.call(plugin, null);
-    expect(transformedText).toBe(null);
+  it('transformPastedText method with empty value', () => {
+    const transformedText = plugin.props.transformPastedText?.call(
+      plugin,
+      '',
+      false,
+      undefined as unknown as EditorView
+    );
+    expect(transformedText).toBe('');
   });
 
   it('insert method should insert JSON and add an empty line after reference', () => {
@@ -81,8 +86,8 @@ describe('PasteJSONFPlugin', () => {
       schema: effSchema,
       plugins: [plugin],
     });
-    plugin.spec.appendTransaction([], {}, state);
-    expect(plugin.schema).toBe(null);
+    plugin.spec.appendTransaction?.([], {} as unknown as EditorState, state);
+    expect(plugin.schema).toBeUndefined();
   });
 
   it('transformPasted method should replace slice', () => {
@@ -93,9 +98,13 @@ describe('PasteJSONFPlugin', () => {
     const slice = new Slice(mySchema as unknown as Fragment, 0, 0);
     Object.assign(slice.content, {childCount: -1});
     plugin.slice = slice;
-    const transformedSlice = plugin.props.transformPasted(slice);
+    const transformedSlice = plugin.props.transformPasted?.call(
+      plugin,
+      slice,
+      undefined as unknown as EditorView
+    );
     expect(transformedSlice).toBe(slice);
-    expect(plugin.slice).toBeNull();
+    expect(plugin.slice).toBeUndefined();
   });
 
   it('transformPasted method should replace slice with stored slice', () => {
@@ -106,9 +115,13 @@ describe('PasteJSONFPlugin', () => {
     const slice = new Slice(mySchema as unknown as Fragment, 0, 0);
     Object.assign(slice.content, {childCount: 1});
     plugin.slice = slice;
-    const transformedSlice = plugin.props.transformPasted(slice);
+    const transformedSlice = plugin.props.transformPasted?.call(
+      plugin,
+      slice,
+      undefined as unknown as EditorView
+    );
     expect(transformedSlice).toBe(slice);
-    expect(plugin.slice).toBeNull();
+    expect(plugin.slice).toBeUndefined();
   });
 
   it('transformPastedText method should parse JSON and set the slice', () => {
@@ -116,7 +129,12 @@ describe('PasteJSONFPlugin', () => {
       type: 'paragraph',
       content: [{type: 'text', text: 'Hello'}],
     });
-    const transformedText = plugin.props.transformPastedText.call(plugin, text);
+    const transformedText = plugin.props.transformPastedText?.call(
+      plugin,
+      text,
+      false,
+      undefined as unknown as EditorView
+    );
 
     expect(transformedText).toBe(text);
   });
