@@ -8,8 +8,8 @@ import {
 } from 'prosemirror-state';
 import {EditorView} from 'prosemirror-view';
 export class PasteJSONPlugin extends Plugin {
-  schema: Schema = null;
-  slice: Slice = null;
+  schema!: Schema;
+  slice?: Slice;
   constructor() {
     super({
       key: new PluginKey('pasteJSON'),
@@ -29,11 +29,12 @@ export class PasteJSONPlugin extends Plugin {
           return text;
         },
         transformPasted(slice: Slice) {
-          if (0 < slice.content.childCount && (this as PasteJSONPlugin).slice) {
-            slice = (this as PasteJSONPlugin).slice;
+          const lastSlice = (this as PasteJSONPlugin).slice;
+          if (0 < slice.content.childCount && lastSlice) {
+            slice = lastSlice;
           }
           // reset
-          (this as PasteJSONPlugin).slice = null;
+          (this as PasteJSONPlugin).slice = undefined;
           return slice;
         },
       },
@@ -80,7 +81,7 @@ export class PasteJSONPlugin extends Plugin {
     if (from !== to) {
       return tr;
     }
-    const paragraphNode = paragraph.create({}, textNode, null);
+    const paragraphNode = paragraph.create({}, textNode);
     tr = tr.insert(
       from + tr.selection.$head.node(1).nodeSize - 4,
       Fragment.from(paragraphNode)
