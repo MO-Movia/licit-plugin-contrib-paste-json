@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "es6",
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "esnext",
     "moduleResolution": "node",
     "lib": [
       "es2017",
@@ -18,9 +19,8 @@
     ],
     // Ensure that .d.ts files are created by tsc, but not .js files
     "declaration": true,
-    "emitDeclarationOnly": true,
     // Ensure that Babel can safely transpile files in the TypeScript project
-    "isolatedModules": true,
+    "isolatedModules": true
   },
   "typeAcquisition": {
     "enable": true
@@ -31,5 +31,5 @@
   "exclude": [
     "node_modules",
     "**/*.test.ts"
-  ],
+  ]
 }
