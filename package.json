@@ -33,7 +33,7 @@
     "jest-prosemirror": "^2.0.0",
     "lint-staged": "^13.1.0",
     "style-loader": "^3.3.1",
-    "stylelint": "^14.16.0",
+    "stylelint": "^16.2.1",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3"
