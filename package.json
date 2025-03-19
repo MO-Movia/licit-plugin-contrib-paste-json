@@ -5,7 +5,7 @@
   "description": "MO's ProseMirror Plugin that allows you to paste in prosemirror JSON into the editor.",
   "main": "index.js",
   "typings": "index.d.ts",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MO-Movia/licit-plugin-contrib-paste-json.git"
@@ -39,18 +39,19 @@
     "typescript": "^5.3.3"
   },
   "overrides": {
-    "semver": "^7.5.2"
+    "libxmljs2": "^1.0.0"
   },
   "scripts": {
     "test": "jest --coverage",
     "clean": "rm -rf dist/ && rm -f modusoperandi-licit-paste-json-*.*.*.tgz",
     "lint:ts": "eslint src --ext .ts --fix",
     "lint": "npm run lint:ts",
-    "ci:build": "tsc --build && copyfiles --up 1 \"src/**/*.css\" dist  && copyfiles package.json dist",
+    "ci:build": "tsc --build && copyfiles --up 1 \"src/**/*.css\" dist  && copyfiles package.json LICENSE dist",
     "test:unit": "jest",
     "test:coverage": "jest --coverage",
     "publish:dist": "npm publish",
-    "ci:bom": "cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml"
+    "ci:bom": "cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml",
+    "verify": "npm run lint -- --fix && npm run ci:build && npm run test:coverage && echo 'All Tests Passed!'"
   },
   "importSort": {
     ".js": {

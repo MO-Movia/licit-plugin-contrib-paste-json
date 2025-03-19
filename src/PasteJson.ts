@@ -23,8 +23,8 @@ export class PasteJSONPlugin extends Plugin {
                 this as PasteJSONPlugin
               ).getSlice(json);
             }
-          } catch (_e) {
-            /* empty */
+          } catch {
+            /* ignore */
           }
           return text;
         },
