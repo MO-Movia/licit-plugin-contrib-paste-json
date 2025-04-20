@@ -16,7 +16,7 @@
     "prosemirror-transform": "^1.7.0"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "^2.1.0",
+    "@cyclonedx/cyclonedx-npm": "^3.0.0",
     "@types/jest": "^29.2.4",
     "@types/node": "^22.1.0",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
