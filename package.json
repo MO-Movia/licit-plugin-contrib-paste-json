@@ -8,7 +8,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MO-Movia/licit-plugin-contrib-paste-json.git"
+    "url": "https://github.com/MO-Movia/licit-plugin-contrib-paste-json"
   },
   "peerDependencies": {
     "prosemirror-model": "^1.16.1",
