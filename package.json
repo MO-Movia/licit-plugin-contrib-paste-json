@@ -18,7 +18,7 @@
   "devDependencies": {
     "@cyclonedx/cyclonedx-npm": "^5.0.0",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.0.2",
+    "@types/node": "^26.0.1",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
     "@typescript-eslint/parser": "^8.5.0",
     "copyfiles": "^2.4.1",
