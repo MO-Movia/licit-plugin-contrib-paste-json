@@ -1,0 +1,16 @@
+# Build workflow — delegates to the shared workflow in MO-Movia/CI.
+# For more information see: https://github.com/MO-Movia/CI
+
+name: build
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [develop, main, master]
+
+jobs:
+  build:
+    uses: MO-Movia/CI/.github/workflows/build.yml@main
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

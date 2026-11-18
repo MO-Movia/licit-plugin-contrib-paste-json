@@ -1,0 +1,11 @@
+# Publish workflow — delegates to the shared workflow in MO-Movia/CI.
+
+name: publish
+
+on:
+  push:
+    branches: [main, master]
+
+jobs:
+  publish:
+    uses: MO-Movia/CI/.github/workflows/publish.yml@main

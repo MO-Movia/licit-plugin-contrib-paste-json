@@ -4,6 +4,7 @@ import {EditorView} from 'prosemirror-view';
 import {schema, builders} from 'prosemirror-test-builder';
 import {Fragment, Schema, Slice} from 'prosemirror-model';
 import {Plugin, PluginKey, EditorState, TextSelection} from 'prosemirror-state';
+import {canNodeTypeReplaceBlockAt} from './canNodeTypeReplaceBlock';
 
 class TestPlugin extends Plugin {
   constructor() {
@@ -237,5 +238,111 @@ describe('PasteJSONFPlugin', () => {
     const tr = view.state.tr.setSelection(selection);
     const insertParagraph = plugin.insertParagraph(state, tr);
     expect(insertParagraph).toBe(tr);
+  });
+});
+
+describe('PasteJSONPlugin branch coverage', () => {
+  let plugin!: PasteJSONPlugin;
+
+  beforeEach(() => {
+    plugin = new PasteJSONPlugin();
+  });
+
+  it('transformPastedText should skip JSON parsing for oversized text', () => {
+    const text = 'x'.repeat(5_000_001);
+    const parseSpy = jest.spyOn(JSON, 'parse');
+    const transformedText = plugin.props.transformPastedText?.call(
+      plugin,
+      text,
+      false,
+      undefined as unknown as EditorView
+    );
+    expect(transformedText).toBe(text);
+    expect(parseSpy).not.toHaveBeenCalled();
+    parseSpy.mockRestore();
+  });
+
+  it('insert should return early when the node type cannot replace the block', () => {
+    const mySchema = new Schema({
+      nodes: {
+        doc: {content: 'reference'},
+        reference: {
+          content: 'inline*',
+          group: 'block',
+          attrs: {id: {default: ''}},
+          toDOM() {
+            return ['div', 0];
+          },
+        },
+        paragraph: {
+          content: 'text*',
+          group: 'block',
+          toDOM() {
+            return ['p', 0];
+          },
+        },
+        text: {inline: true, group: 'inline'},
+      },
+    });
+    const customDoc = mySchema.nodes.doc.create(
+      null,
+      mySchema.nodes.reference.create({id: 'x'}, mySchema.text('hi'))
+    );
+    const state = EditorState.create({doc: customDoc, schema: mySchema});
+    const dom = document.createElement('div');
+    const view = new EditorView({mount: dom}, {state});
+    plugin.schema = mySchema;
+    view.dispatch = jest.fn();
+    plugin.insert(
+      {type: 'paragraph', content: [{type: 'text', text: 'nope'}]},
+      view
+    );
+    expect(view.dispatch).not.toHaveBeenCalled();
+  });
+
+  it('insertParagraph should return tr when the selection has no parent block', () => {
+    const mySchema = new Schema({
+      nodes: schema.spec.nodes,
+      marks: schema.spec.marks,
+    });
+    const {doc, p} = builders(mySchema, {p: {nodeType: 'paragraph'}});
+    const state = EditorState.create({
+      doc: doc(p('Hello')),
+      schema: mySchema,
+    });
+    const tr = {
+      selection: {
+        from: 1,
+        to: 1,
+        $head: {node: () => undefined},
+      },
+    } as unknown as Parameters<typeof plugin.insertParagraph>[1];
+    const out = plugin.insertParagraph(state, tr);
+    expect(out).toBe(tr);
+  });
+
+  it('canNodeTypeReplaceBlockAt handles depth-0 and non-inline parents', () => {
+    const mySchema = new Schema({
+      nodes: schema.spec.nodes,
+      marks: schema.spec.marks,
+    });
+    const {doc, p, blockquote} = builders(mySchema, {
+      p: {nodeType: 'paragraph'},
+      blockquote: {nodeType: 'blockquote'},
+    });
+    const plainDoc = doc(p('x'));
+    // depth 0: position before the top-level paragraph
+    expect(
+      canNodeTypeReplaceBlockAt(plainDoc, 0, mySchema.nodes['paragraph'])
+    ).toBe(true);
+    // non-inline parent: boundary inside blockquote before its paragraph
+    const bqDoc = doc(blockquote(p('x')));
+    expect(
+      typeof canNodeTypeReplaceBlockAt(
+        bqDoc,
+        1,
+        mySchema.nodes['paragraph']
+      )
+    ).toBe('boolean');
   });
 });

@@ -1,0 +1,28 @@
+# Version bump workflow — delegates to the shared workflow in MO-Movia/CI.
+
+name: Bump Version
+
+on:
+  workflow_dispatch:
+    inputs:
+      type:
+        description: 'Version Type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+      create-branch:
+        description: 'Create and push a Release/<tag> branch'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  bump:
+    uses: MO-Movia/CI/.github/workflows/version-bump.yml@main
+    with:
+      type: ${{ inputs.type }}
+      create-branch: ${{ inputs.create-branch }}

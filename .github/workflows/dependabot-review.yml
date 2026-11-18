@@ -1,0 +1,14 @@
+# Dependabot PR auto-review — delegates to the shared workflow in MO-Movia/CI.
+
+name: Dependabot PR Auto-Review
+on: pull_request_target
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  review-dependabot-pr:
+    uses: MO-Movia/CI/.github/workflows/dependabot-review.yml@main
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,18 @@
+# Dependency check workflow — delegates to the shared workflow in MO-Movia/CI.
+
+name: dependencycheck
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *' # 12:00 AM Daily
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  dependencycheck:
+    uses: MO-Movia/CI/.github/workflows/dependencycheck.yml@main
+    secrets:
+      NVD_KEY: ${{ secrets.NVD_KEY }}
+      SONATYPE_OSS_INDEX_USERNAME: ${{ secrets.SONATYPE_OSS_INDEX_USERNAME }}
+      SONATYPE_OSS_INDEX_TOKEN: ${{ secrets.SONATYPE_OSS_INDEX_TOKEN }}
