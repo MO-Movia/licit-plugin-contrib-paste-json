@@ -16,7 +16,6 @@
     "prosemirror-transform": "^1.7.0"
   },
   "devDependencies": {
-    "@cyclonedx/cyclonedx-npm": "^6.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.0.1",
     "@typescript-eslint/eslint-plugin": "^8.4.0",
@@ -38,9 +37,6 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.3.3"
   },
-  "overrides": {
-    "libxmljs2": "^1.0.0"
-  },
   "scripts": {
     "test": "jest --coverage",
     "clean": "rm -rf dist/ && rm -f modusoperandi-licit-paste-json-*.*.*.tgz",
@@ -50,7 +46,7 @@
     "test:unit": "jest",
     "test:coverage": "jest --coverage",
     "publish:dist": "npm publish",
-    "ci:bom": "cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml",
+    "ci:bom": "npx @cyclonedx/cyclonedx-npm --ignore-npm-errors --short-PURLs --output-format XML --output-file dist/bom.xml",
     "verify": "npm run lint -- --fix && npm run ci:build && npm run test:coverage && echo 'All Tests Passed!'"
   },
   "importSort": {
